@@ -65,13 +65,14 @@ public class ArrayList<E> implements List<E> {
     }
 
     private Object[] shrink() {
-        return Arrays.copyOf(this.elements, this.elements.length/2);
+        return Arrays.copyOf(this.elements, this.elements.length / 2);
     }
 
     @Override
-    public Iterator<E> iterator(){
+    public Iterator<E> iterator() {
         return new Iterator<E>() {
             private int index = 0;
+
             @Override
             public boolean hasNext() {
                 return this.index < size();
@@ -79,12 +80,33 @@ public class ArrayList<E> implements List<E> {
 
             @Override
             public E next() {
-                return null;
+                return get(index++);
             }
         };
     }
 
+    @Override
+    public void add(int index, E element) {
+        checkIndex(index);
+        insert(index, element);
+    }
 
+    private void insert(int index, E element) {
+        if (this.size == this.elements.length) {
+            this.elements = grow();
+        }
+        E lastElement = this.getElement(this.size - 1);
+        for (int i = this.size - 1; i > index; i--) {
+            this.elements[i] = this.elements[i - 1];
+        }
+        this.elements[this.size] = lastElement;
+        this.elements[index] = element;
+        this.size++;
+    }
+
+    private E getElement(int index) {
+        return (E) this.elements[index];
+    }
 
     @Override
     public int size() {
@@ -98,6 +120,11 @@ public class ArrayList<E> implements List<E> {
 
     @Override
     public boolean contains(Object o) {
+        for (int i = 0; i < this.elements.length; i++) {
+            if (this.elements == o) {
+                return true;
+            }
+        }
         return false;
     }
 
@@ -127,13 +154,13 @@ public class ArrayList<E> implements List<E> {
     }
 
     @Override
-    public void add(int index, Object element) {
-
-    }
-
-    @Override
     public int indexOf(Object o) {
-        return 0;
+        for (int i = 0; i < this.elements.length; i++){
+            if (this.elements[i] == o){
+                return i;
+            }
+        }
+        return -1;
     }
 
     @Override

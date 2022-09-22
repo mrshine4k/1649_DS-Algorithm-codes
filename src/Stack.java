@@ -1,4 +1,5 @@
 import java.util.EmptyStackException;
+import java.util.Iterator;
 
 public class Stack<E> {
     private Node<E> top;
@@ -39,6 +40,36 @@ public class Stack<E> {
         if (this.size == 0) {
             throw new EmptyStackException();
         }
+    }
+
+    public E peek(){
+        ensureNonEmpty();
+        return this.top.element;
+    }
+
+    public Iterator<E> iterator(){
+        return new Iterator<E>() {
+            private Node<E> current = top;
+            @Override
+            public boolean hasNext() {
+                return current != null;
+            }
+
+            @Override
+            public E next() {
+                E element = current.element;
+                this.current = this.current.previous;
+                return element;
+            }
+        };
+    }
+
+    public int size(){
+        return this.size;
+    }
+
+    public boolean isEmpty(){
+        return this.size == 0;
     }
 
 }
